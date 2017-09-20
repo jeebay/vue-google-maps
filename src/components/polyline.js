@@ -44,6 +44,20 @@ export default {
   mixins: [MapElementMixin, getPropsValuesMixin],
   props: props,
 
+  methods: {
+    animateCircle(line) {
+      var count = 0;
+
+      window.setInterval(function() {
+        count = (count + 1) % 200;
+
+        var icons = line.get('icons');
+        icons[0].offset = (count / 2) + '%';
+        line.set('icons', icons);
+      }, 200);
+    }
+  },
+
   render() { return ''; },
 
   destroyed () {
@@ -58,6 +72,8 @@ export default {
     Object.assign(options, this.options);
     this.$polylineObject = new google.maps.Polyline(options);
     this.$polylineObject.setMap(this.$map);
+
+    this.animateCircle(this.$polylineObject);
 
     propsBinder(this, this.$polylineObject, omit(props, ['deepWatch', 'path']));
     eventBinder(this, this.$polylineObject, events);

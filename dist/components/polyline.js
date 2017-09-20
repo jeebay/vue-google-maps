@@ -59,6 +59,20 @@ exports.default = {
   mixins: [_mapElementMixin2.default, _getPropsValuesMixin2.default],
   props: props,
 
+  methods: {
+    animateCircle: function animateCircle(line) {
+      var count = 0;
+
+      window.setInterval(function () {
+        count = (count + 1) % 200;
+
+        var icons = line.get('icons');
+        icons[0].offset = count / 2 + '%';
+        line.set('icons', icons);
+      }, 200);
+    }
+  },
+
   render: function render() {
     return '';
   },
@@ -75,6 +89,8 @@ exports.default = {
     Object.assign(options, this.options);
     this.$polylineObject = new google.maps.Polyline(options);
     this.$polylineObject.setMap(this.$map);
+
+    this.animateCircle(this.$polylineObject);
 
     (0, _propsBinder2.default)(this, this.$polylineObject, (0, _omit3.default)(props, ['deepWatch', 'path']));
     (0, _eventsBinder2.default)(this, this.$polylineObject, events);
