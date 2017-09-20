@@ -23,6 +23,10 @@ const props = {
   deepWatch: {
     type: Boolean,
     default: false,
+  },
+  animate: {
+    type: Boolean,
+    default: false
   }
 };
 
@@ -73,7 +77,7 @@ export default {
     this.$polylineObject = new google.maps.Polyline(options);
     this.$polylineObject.setMap(this.$map);
 
-    this.animateCircle(this.$polylineObject);
+    if (this.animate) this.animateCircle(this.$polylineObject);
 
     propsBinder(this, this.$polylineObject, omit(props, ['deepWatch', 'path']));
     eventBinder(this, this.$polylineObject, events);
