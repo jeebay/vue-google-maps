@@ -50,6 +50,10 @@ var props = {
   deepWatch: {
     type: Boolean,
     default: false
+  },
+  animate: {
+    type: Boolean,
+    default: false
   }
 };
 
@@ -61,13 +65,18 @@ exports.default = {
 
   methods: {
     animateCircle: function animateCircle(line) {
-      var count = 0;
+      var offsets = [];
+      line.get('icons').forEach(function (icon) {
+        offsets.push(parseInt(icon.offset.replace('%', ''), 10));
+      });
 
       window.setInterval(function () {
-        count = (count + 1) % 200;
-
         var icons = line.get('icons');
-        icons[0].offset = count / 2 + '%';
+        icons.forEach(function (icon, i) {
+          offsets[i] = (offsets[i] + 1) % 200;
+          icon.offset = offsets[i] / 2 + '%';
+        });
+
         line.set('icons', icons);
       }, 200);
     }
@@ -90,7 +99,7 @@ exports.default = {
     this.$polylineObject = new google.maps.Polyline(options);
     this.$polylineObject.setMap(this.$map);
 
-    this.animateCircle(this.$polylineObject);
+    if (this.animate) this.animateCircle(this.$polylineObject);
 
     (0, _propsBinder2.default)(this, this.$polylineObject, (0, _omit3.default)(props, ['deepWatch', 'path']));
     (0, _eventsBinder2.default)(this, this.$polylineObject, events);

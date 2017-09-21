@@ -49,14 +49,19 @@ export default {
   props: props,
 
   methods: {
-    animateCircle(line) {
-      var count = 0;
+    animateCircle: function animateCircle(line) {
+      var offsets = [];
+      line.get('icons').forEach(function(icon) {
+        offsets.push(parseInt(icon.offset.replace('%', ''), 10));
+      })
 
-      window.setInterval(function() {
-        count = (count + 1) % 200;
-
+      window.setInterval(function () {  
         var icons = line.get('icons');
-        icons[0].offset = (count / 2) + '%';
+        icons.forEach(function(icon, i) {
+          offsets[i] = (offsets[i] + 1) % 200;
+          icon.offset = offsets[i] / 2 + '%';
+        })
+
         line.set('icons', icons);
       }, 200);
     }
